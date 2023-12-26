@@ -39,9 +39,9 @@ const find_value = tiled.registerAction(shared_name_find_value, function () {
 find_value.text = shared_name_find_value;
 find_value.icon = "find_v.png"
 
-tiled.extendMenu("Edit", [
+tiled.extendMenu("Map", [
     { separator: true },
-    { action: shared_name_find_value, before: "SelectAll" }
+    { action: shared_name_find_value, before: "SelectNextTileset" }
 ]);
 
 
@@ -54,8 +54,8 @@ const find_property = tiled.registerAction(shared_name_find_property, function (
 find_property.text = shared_name_find_property;
 find_property.icon = "find_p.png"
 
-tiled.extendMenu("Edit", [
-    { action: shared_name_find_property, before: "SelectAll" }
+tiled.extendMenu("Map", [
+    { action: shared_name_find_property, before: "SelectNextTileset" }
 ]);
 
 
@@ -68,7 +68,7 @@ const find_value_in_property = tiled.registerAction(shared_name_find_value_in_pr
 find_value_in_property.text = shared_name_find_value_in_property;
 find_value_in_property.icon = "find_v_in_p.png"
 
-tiled.extendMenu("Edit", [
-    { action: shared_name_find_value_in_property, before: "SelectAll" },
+tiled.extendMenu("Map", [
+    { action: shared_name_find_value_in_property, before: "SelectNextTileset" },
     { separator: true }
 ]);
