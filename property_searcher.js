@@ -49,7 +49,7 @@ function numberize(input) {
 
 
 const find_value = tiled.registerAction(shared_name_find_value, function () {
-    let new_value = tiled.prompt("What value should object have in any of it properties ?\nValue will be treated as number if it can be converted to it , otherwise it will be treated as string .\nIf you don't want auto conversion then just wrap around input with \"\" (e.g. \"\" --> empty string and \"1\" --> string with number one) .", previous_value, "Value ?");
+    let new_value = tiled.prompt("What value should object have in any of it properties ?\nValue will be treated as number if it can be converted to it ,\notherwise it will be treated as string .\nIf you don't want auto conversion then just wrap around input with \"\"\n(e.g. \"\" --> empty string and \"1\" --> string with number one) .", previous_value, "Value ?");
 
     if (new_value === "") return; //Note - "Cancel" empty string and user empty string are different (since "" !== "\"\"")
 
@@ -90,7 +90,7 @@ tiled.extendMenu("Map", [
 
 
 const find_property = tiled.registerAction(shared_name_find_property, function () {
-    let new_property_name = tiled.prompt("In which property object should have supplied value ?", previous_property_name, "Property ?");
+    let new_property_name = tiled.prompt("\n\n‎‎‎‎‎‎‎‎‎‎‎‎‎            In which property object should have supplied value ?            ‎‎‎‎‎‎‎‎‎‎‎‎‎\n\n", previous_property_name, "Property ?");
 
     if (new_property_name === "") return;
 
@@ -124,8 +124,8 @@ tiled.extendMenu("Map", [
 
 
 const find_value_in_property = tiled.registerAction(shared_name_find_value_in_property, function () {
-    let new_value = tiled.prompt("What value should object have ?\nValue will be treated as number if it can be converted to it , otherwise it will be treated as string .\nIf you don't want auto conversion then just wrap around input with \"\" (e.g. \"\" --> empty string and \"1\" --> string with number one) .", previous_value, "Value ?");
-    let new_property_name = tiled.prompt("In which property object should have supplied value ?", previous_property_name, "Property ?");
+    let new_value = tiled.prompt("What value should object have ?\nValue will be treated as number if it can be converted to it ,\notherwise it will be treated as string .\nIf you don't want auto conversion then just wrap around input with \"\"\n(e.g. \"\" --> empty string and \"1\" --> string with number one) .", previous_value, "Value ?");
+    let new_property_name = tiled.prompt("\n\n‎‎‎‎‎‎‎‎‎‎‎‎‎            In which property object should have supplied value ?            ‎‎‎‎‎‎‎‎‎‎‎‎‎\n\n", previous_property_name, "Property ?");
 
     if (new_value === "") return; //Note - "Cancel" empty string and user empty string are different (since "" !== "\"\"")
     if (new_property_name === "") return;
