@@ -28,6 +28,7 @@ SOFTWARE.
 let shared_name_find_value = "Find objects with value";
 let shared_name_find_property = "Find objects with property";
 let shared_name_find_value_in_property = "Find objects with value in property";
+let shared_name_option_only_on_visible_layers = "finder - Only on visible layers";
 
 
 let previous_value = "";
@@ -63,12 +64,14 @@ const find_value = tiled.registerAction(shared_name_find_value, function () {
             if (current_layer.objects != null) {                    //на случай , если слой не будет иметь объектов вообще
                 current_layer.objects.forEach(function (processed_object) {
                     processed_object.selected = false;
-                    let properties = processed_object.properties();
-                    for (const [key, value] of Object.entries(properties)) {
-                        if (typeof (value) === "object") {
-                            if (value.value === new_value) processed_object.selected = true;
-                        } else {
-                            if (value === new_value) processed_object.selected = true;
+                    if (!(option_only_on_visible_layers.checked && !current_layer.visible)) {
+                        let properties = processed_object.properties();
+                        for (const [key, value] of Object.entries(properties)) {
+                            if (typeof (value) === "object") {
+                                if (value.value === new_value) processed_object.selected = true;
+                            } else {
+                                if (value === new_value) processed_object.selected = true;
+                            }
                         }
                     }
                 });
@@ -101,9 +104,11 @@ const find_property = tiled.registerAction(shared_name_find_property, function (
             if (current_layer.objects != null) {                    //на случай , если слой не будет иметь объектов вообще
                 current_layer.objects.forEach(function (processed_object) {
                     processed_object.selected = false;
-                    let properties = processed_object.properties();
-                    for (const [key, value] of Object.entries(properties)) {
-                        if (key === new_property_name) processed_object.selected = true;
+                    if (!(option_only_on_visible_layers.checked && !current_layer.visible)) {
+                        let properties = processed_object.properties();
+                        for (const [key, value] of Object.entries(properties)) {
+                            if (key === new_property_name) processed_object.selected = true;
+                        }
                     }
                 });
             }
@@ -124,7 +129,7 @@ tiled.extendMenu("Map", [
 const find_value_in_property = tiled.registerAction(shared_name_find_value_in_property, function () {
     let new_value = tiled.prompt("What value should object have ?\nValue will be treated as number if it can be converted to it ,\notherwise it will be treated as string .\nIf you don't want auto conversion then just wrap around input with \"\"\n(e.g. \"\" --> empty string and \"1\" --> string with number one) .", previous_value, "Value ?");
     if (new_value === "") return; //Note - "Cancel" empty string and user empty string are different (since "" !== "\"\"")
-    
+
     let new_property_name = tiled.prompt("\n\n‎‎‎‎‎‎‎‎‎‎‎‎‎            In which property object should have supplied value ?            ‎‎‎‎‎‎‎‎‎‎‎‎‎\n\n", previous_property_name, "Property ?");
     if (new_property_name === "") return;
 
@@ -140,11 +145,13 @@ const find_value_in_property = tiled.registerAction(shared_name_find_value_in_pr
             if (current_layer.objects != null) {                    //на случай , если слой не будет иметь объектов вообще
                 current_layer.objects.forEach(function (processed_object) {
                     processed_object.selected = false;
-                    let value = processed_object.property(new_property_name);
-                    if (typeof (value) === "object") {
-                        if (value.value === new_value) processed_object.selected = true;
-                    } else {
-                        if (value === new_value) processed_object.selected = true;
+                    if (!(option_only_on_visible_layers.checked && !current_layer.visible)) {
+                        let value = processed_object.property(new_property_name);
+                        if (typeof (value) === "object") {
+                            if (value.value === new_value) processed_object.selected = true;
+                        } else {
+                            if (value === new_value) processed_object.selected = true;
+                        }
                     }
                 });
             }
@@ -156,6 +163,18 @@ find_value_in_property.text = shared_name_find_value_in_property;
 find_value_in_property.icon = "find_v_in_p.png";
 
 tiled.extendMenu("Map", [
-    { action: shared_name_find_value_in_property, before: "SelectNextTileset" },
+    { action: shared_name_find_value_in_property, before: "SelectNextTileset" }
+]);
+
+
+
+const option_only_on_visible_layers = tiled.registerAction(shared_name_option_only_on_visible_layers, function () {});
+
+option_only_on_visible_layers.text = shared_name_option_only_on_visible_layers;
+option_only_on_visible_layers.checkable = true;
+option_only_on_visible_layers.checked = false;
+option_only_on_visible_layers.iconVisibleInMenu = false;
+tiled.extendMenu("Map", [
+    { action: shared_name_option_only_on_visible_layers, before: "SelectNextTileset" },
     { separator: true }
 ]);
