@@ -58,20 +58,19 @@ const find_value = tiled.registerAction(shared_name_find_value, function () {
     new_value = numberize(new_value);
 
     let map = tiled.activeAsset;
+    map.selectedObjects = [];
     for (let i = 0; i < map.layerCount; i++) {
         current_layer = map.layerAt(i);
+        if (option_only_on_visible_layers.checked && !current_layer.visible) continue;
         if (current_layer.isObjectLayer) {                          //игнорировать необъектные слои
             if (current_layer.objects != null) {                    //на случай , если слой не будет иметь объектов вообще
                 current_layer.objects.forEach(function (processed_object) {
-                    processed_object.selected = false;
-                    if (!(option_only_on_visible_layers.checked && !current_layer.visible)) {
-                        let properties = processed_object.properties();
-                        for (const [key, value] of Object.entries(properties)) {
-                            if (typeof (value) === "object") {
-                                if (value.value === new_value) processed_object.selected = true;
-                            } else {
-                                if (value === new_value) processed_object.selected = true;
-                            }
+                    let properties = processed_object.properties();
+                    for (const [key, value] of Object.entries(properties)) {
+                        if (typeof (value) === "object") {
+                            if (value.value === new_value) processed_object.selected = true;
+                        } else {
+                            if (value === new_value) processed_object.selected = true;
                         }
                     }
                 });
@@ -98,17 +97,16 @@ const find_property = tiled.registerAction(shared_name_find_property, function (
     previous_property_name = new_property_name;
 
     let map = tiled.activeAsset;
+    map.selectedObjects = [];
     for (let i = 0; i < map.layerCount; i++) {
         current_layer = map.layerAt(i);
+        if (option_only_on_visible_layers.checked && !current_layer.visible) continue;
         if (current_layer.isObjectLayer) {                          //игнорировать необъектные слои
             if (current_layer.objects != null) {                    //на случай , если слой не будет иметь объектов вообще
                 current_layer.objects.forEach(function (processed_object) {
-                    processed_object.selected = false;
-                    if (!(option_only_on_visible_layers.checked && !current_layer.visible)) {
-                        let properties = processed_object.properties();
-                        for (const [key, value] of Object.entries(properties)) {
-                            if (key === new_property_name) processed_object.selected = true;
-                        }
+                    let properties = processed_object.properties();
+                    for (const [key, value] of Object.entries(properties)) {
+                        if (key === new_property_name) processed_object.selected = true;
                     }
                 });
             }
@@ -139,19 +137,18 @@ const find_value_in_property = tiled.registerAction(shared_name_find_value_in_pr
     new_value = numberize(new_value);
 
     let map = tiled.activeAsset;
+    map.selectedObjects = [];
     for (let i = 0; i < map.layerCount; i++) {
         current_layer = map.layerAt(i);
+        if (option_only_on_visible_layers.checked && !current_layer.visible) continue;
         if (current_layer.isObjectLayer) {                          //игнорировать необъектные слои
             if (current_layer.objects != null) {                    //на случай , если слой не будет иметь объектов вообще
                 current_layer.objects.forEach(function (processed_object) {
-                    processed_object.selected = false;
-                    if (!(option_only_on_visible_layers.checked && !current_layer.visible)) {
-                        let value = processed_object.property(new_property_name);
-                        if (typeof (value) === "object") {
-                            if (value.value === new_value) processed_object.selected = true;
-                        } else {
-                            if (value === new_value) processed_object.selected = true;
-                        }
+                    let value = processed_object.property(new_property_name);
+                    if (typeof (value) === "object") {
+                        if (value.value === new_value) processed_object.selected = true;
+                    } else {
+                        if (value === new_value) processed_object.selected = true;
                     }
                 });
             }
@@ -168,7 +165,7 @@ tiled.extendMenu("Map", [
 
 
 
-const option_only_on_visible_layers = tiled.registerAction(shared_name_option_only_on_visible_layers, function () {});
+const option_only_on_visible_layers = tiled.registerAction(shared_name_option_only_on_visible_layers, function () { });
 
 option_only_on_visible_layers.text = shared_name_option_only_on_visible_layers;
 option_only_on_visible_layers.checkable = true;
