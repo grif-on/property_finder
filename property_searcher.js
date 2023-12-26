@@ -53,7 +53,33 @@ function numberize(input) {
 
 
 const find_value = tiled.registerAction(shared_name_find_value, function () {
+    let new_value = tiled.prompt("What value should object have in any of it properties ?\nValue will be treated as number if it can be converted to it , otherwise it will be treated as string .\nIf you don't want auto conversion then just wrap around input with \"\" (e.g. \"\" --> empty string and \"1\" --> string with number one) .", previous_value, "Value ?");
 
+    if (new_value === "") return; //Note - "Cancel" empty string and user empty string are different (since "" !== "\"\"")
+
+    previous_value = new_value;
+
+    new_value = numberize(new_value);
+
+    let map = tiled.activeAsset;
+    for (let i = 0; i < map.layerCount; i++) {
+        current_layer = map.layerAt(i);
+        if (current_layer.isObjectLayer) {                          //игнорировать необъектные слои
+            if (current_layer.objects != null) {                    //на случай , если слой не будет иметь объектов вообще
+                current_layer.objects.forEach(function (processed_object) {
+                    processed_object.selected = false;
+                    let properties = processed_object.properties();
+                    for (const [key, value] of Object.entries(properties)) {
+                        if (typeof (value) === "object") {
+                            if (value.value === new_value) processed_object.selected = true;
+                        } else {
+                            if (value === new_value) processed_object.selected = true;
+                        }
+                    }
+                });
+            }
+        }
+    }
 });
 
 find_value.text = shared_name_find_value;
@@ -111,8 +137,6 @@ const find_value_in_property = tiled.registerAction(shared_name_find_value_in_pr
         }
     }
 });
-find_value_in_property.previous_value = "";
-find_value_in_property.previous_property_name = "";
 
 find_value_in_property.text = shared_name_find_value_in_property;
 find_value_in_property.icon = "find_v_in_p.png"
