@@ -94,7 +94,27 @@ tiled.extendMenu("Map", [
 
 
 const find_property = tiled.registerAction(shared_name_find_property, function () {
+    let new_property_name = tiled.prompt("In which property object should have supplied value ?", previous_property_name, "Property ?");
 
+    if (new_property_name === "") return;
+
+    previous_property_name = new_property_name;
+
+    let map = tiled.activeAsset;
+    for (let i = 0; i < map.layerCount; i++) {
+        current_layer = map.layerAt(i);
+        if (current_layer.isObjectLayer) {                          //игнорировать необъектные слои
+            if (current_layer.objects != null) {                    //на случай , если слой не будет иметь объектов вообще
+                current_layer.objects.forEach(function (processed_object) {
+                    processed_object.selected = false;
+                    let properties = processed_object.properties();
+                    for (const [key, value] of Object.entries(properties)) {
+                        if (key === new_property_name) processed_object.selected = true;
+                    }
+                });
+            }
+        }
+    }
 });
 
 find_property.text = shared_name_find_property;
