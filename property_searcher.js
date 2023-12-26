@@ -30,6 +30,10 @@ let shared_name_find_property = "Find objects with property";
 let shared_name_find_value_in_property = "Find objects with value in property";
 
 
+let previous_value = "";
+let previous_property_name = "";
+
+
 function numberize(input) {
     let processed_value;
     if (input.charAt(0) === "\"" && (input.charAt(input.length - 1) === "\"" && input.length !== 1)) {
@@ -78,14 +82,14 @@ tiled.extendMenu("Map", [
 
 
 const find_value_in_property = tiled.registerAction(shared_name_find_value_in_property, function () {
-    let new_value = tiled.prompt("What value should object have ?\nValue will be treated as number if it can be converted to it , otherwise it will be treated as string .\nIf you don't want auto conversion then just wrap around input with \"\" (e.g. \"\" --> empty string and \"1\" --> string with number one) .", find_value_in_property.previous_value, "Value ?");
-    let new_property_name = tiled.prompt("In which property object should have supplied value ?", find_value_in_property.previous_property_name, "Property ?");
+    let new_value = tiled.prompt("What value should object have ?\nValue will be treated as number if it can be converted to it , otherwise it will be treated as string .\nIf you don't want auto conversion then just wrap around input with \"\" (e.g. \"\" --> empty string and \"1\" --> string with number one) .", previous_value, "Value ?");
+    let new_property_name = tiled.prompt("In which property object should have supplied value ?", previous_property_name, "Property ?");
 
     if (new_value === "") return; //Note - "Cancel" empty string and user empty string are different (since "" !== "\"\"")
     if (new_property_name === "") return;
 
-    find_value_in_property.previous_value = new_value;
-    find_value_in_property.previous_property_name = new_property_name;
+    previous_value = new_value;
+    previous_property_name = new_property_name;
 
     new_value = numberize(new_value);
 
