@@ -78,8 +78,37 @@ tiled.extendMenu("Map", [
 
 
 const find_value_in_property = tiled.registerAction(shared_name_find_value_in_property, function () {
+    let new_value = tiled.prompt("What value should object have ?\nValue will be treated as number if it can be converted to it , otherwise it will be treated as string .\nIf you don't want auto conversion then just wrap around input with \"\" (e.g. \"\" --> empty string and \"1\" --> string with number one) .", find_value_in_property.previous_value, "Value ?");
+    let new_property_name = tiled.prompt("In which property object should have supplied value ?", find_value_in_property.previous_property_name, "Property ?");
 
+    if (new_value === "") return; //Note - "Cancel" empty string and user empty string are different (since "" !== "\"\"")
+    if (new_property_name === "") return;
+
+    find_value_in_property.previous_value = new_value;
+    find_value_in_property.previous_property_name = new_property_name;
+
+    new_value = numberize(new_value);
+
+    let map = tiled.activeAsset;
+    for (let i = 0; i < map.layerCount; i++) {
+        current_layer = map.layerAt(i);
+        if (current_layer.isObjectLayer) {                          //игнорировать необъектные слои
+            if (current_layer.objects != null) {                    //на случай , если слой не будет иметь объектов вообще
+                current_layer.objects.forEach(function (processed_object) {
+                    processed_object.selected = false;
+                    let value = processed_object.property(new_property_name);
+                    if (typeof (value) === "object") {
+                        if (value.value === new_value) processed_object.selected = true;
+                    } else {
+                        if (value === new_value) processed_object.selected = true;
+                    }
+                });
+            }
+        }
+    }
 });
+find_value_in_property.previous_value = "";
+find_value_in_property.previous_property_name = "";
 
 find_value_in_property.text = shared_name_find_value_in_property;
 find_value_in_property.icon = "find_v_in_p.png"
