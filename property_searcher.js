@@ -38,14 +38,10 @@ function numberize(input) {
     let processed_value;
     if (input.charAt(0) === "\"" && (input.charAt(input.length - 1) === "\"" && input.length !== 1)) {
         processed_value = input.slice(1, input.length - 1);
-        tiled.log("string (since \"\") = " + processed_value);
     } else {
         processed_value = Number(input);
         if (isNaN(processed_value) || !isFinite(processed_value)) {
             processed_value = input;
-            tiled.log("string (since not finite number) = " + processed_value);
-        } else {
-            tiled.log("number = " + processed_value);
         }
     }
     return processed_value;
