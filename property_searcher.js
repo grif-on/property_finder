@@ -30,6 +30,22 @@ let shared_name_find_property = "Find objects with property";
 let shared_name_find_value_in_property = "Find objects with value in property";
 
 
+function numberize(input) {
+    let processed_value;
+    if (input.charAt(0) === "\"" && (input.charAt(input.length - 1) === "\"" && input.length !== 1)) {
+        processed_value = input.slice(1, input.length - 1);
+        tiled.log("string (since \"\") = " + processed_value);
+    } else {
+        processed_value = Number(input);
+        if (isNaN(processed_value) || !isFinite(processed_value)) {
+            processed_value = input;
+            tiled.log("string (since not finite number) = " + processed_value);
+        } else {
+            tiled.log("number = " + processed_value);
+        }
+    }
+    return processed_value;
+}
 
 
 const find_value = tiled.registerAction(shared_name_find_value, function () {
