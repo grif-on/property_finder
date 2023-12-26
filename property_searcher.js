@@ -29,6 +29,7 @@ let shared_name_find_value = "Find objects with value";
 let shared_name_find_property = "Find objects with property";
 let shared_name_find_value_in_property = "Find objects with value in property";
 let shared_name_option_only_on_visible_layers = "finder - Only on visible layers";
+let shared_name_option_also_include_object_types_defaults = "finder - Also include object types default properties/values";
 
 
 let previous_value = "";
@@ -65,7 +66,7 @@ const find_value = tiled.registerAction(shared_name_find_value, function () {
         if (current_layer.isObjectLayer) {                          //игнорировать необъектные слои
             if (current_layer.objects != null) {                    //на случай , если слой не будет иметь объектов вообще
                 current_layer.objects.forEach(function (processed_object) {
-                    let properties = processed_object.properties();
+                    let properties = (option_also_include_object_types_defaults.checked) ? processed_object.resolvedProperties() : processed_object.properties();
                     for (const [key, value] of Object.entries(properties)) {
                         if (typeof (value) === "object") {
                             if (value.value === new_value) processed_object.selected = true;
@@ -104,7 +105,7 @@ const find_property = tiled.registerAction(shared_name_find_property, function (
         if (current_layer.isObjectLayer) {                          //игнорировать необъектные слои
             if (current_layer.objects != null) {                    //на случай , если слой не будет иметь объектов вообще
                 current_layer.objects.forEach(function (processed_object) {
-                    let properties = processed_object.properties();
+                    let properties = (option_also_include_object_types_defaults.checked) ? processed_object.resolvedProperties() : processed_object.properties();
                     for (const [key, value] of Object.entries(properties)) {
                         if (key === new_property_name) processed_object.selected = true;
                     }
@@ -144,7 +145,7 @@ const find_value_in_property = tiled.registerAction(shared_name_find_value_in_pr
         if (current_layer.isObjectLayer) {                          //игнорировать необъектные слои
             if (current_layer.objects != null) {                    //на случай , если слой не будет иметь объектов вообще
                 current_layer.objects.forEach(function (processed_object) {
-                    let value = processed_object.property(new_property_name);
+                    let value = (option_also_include_object_types_defaults.checked) ? processed_object.resolvedProperty(new_property_name) : processed_object.property(new_property_name);
                     if (typeof (value) === "object") {
                         if (value.value === new_value) processed_object.selected = true;
                     } else {
@@ -172,6 +173,18 @@ option_only_on_visible_layers.checkable = true;
 option_only_on_visible_layers.checked = false;
 option_only_on_visible_layers.iconVisibleInMenu = false;
 tiled.extendMenu("Map", [
-    { action: shared_name_option_only_on_visible_layers, before: "SelectNextTileset" },
+    { action: shared_name_option_only_on_visible_layers, before: "SelectNextTileset" }
+]);
+
+
+
+const option_also_include_object_types_defaults = tiled.registerAction(shared_name_option_also_include_object_types_defaults, function () { });
+
+option_also_include_object_types_defaults.text = shared_name_option_also_include_object_types_defaults;
+option_also_include_object_types_defaults.checkable = true;
+option_also_include_object_types_defaults.checked = false;
+option_also_include_object_types_defaults.iconVisibleInMenu = false;
+tiled.extendMenu("Map", [
+    { action: shared_name_option_also_include_object_types_defaults, before: "SelectNextTileset" },
     { separator: true }
 ]);
