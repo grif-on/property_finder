@@ -49,6 +49,25 @@ function numberize(input) {
     return processed_value;
 }
 
+function centerCameraOnObjectArray(objects) {
+    let map = tiled.activeAsset;
+    let min_x = 999999999;
+    let max_x = -999999999;
+    let min_y = 999999999;
+    let max_y = -999999999;
+    objects.forEach(object => {
+        const pos = map.pixelToScreen(object.pos);
+        if (pos.x < min_x) min_x = pos.x;
+        if (pos.x > max_x) max_x = pos.x;
+        if (pos.y < min_y) min_y = pos.y;
+        if (pos.y > max_y) max_y = pos.y;
+    });
+    let x = (min_x + max_x) / 2;
+    let y = (min_y + max_y) / 2;
+    tiled.mapEditor.currentMapView.centerOn(x, y);
+    //tiled.mapEditor.currentMapView.scale = 1;
+}
+
 
 const find_value = tiled.registerAction(shared_name_find_value, function () {
     let new_value = tiled.prompt("What value should object have in any of it properties ?\nValue will be treated as number if it can be converted to it ,\notherwise it will be treated as string .\nIf you don't want auto conversion then just wrap around input with \"\"\n(e.g. \"\" --> empty string and \"1\" --> string with number one) .", previous_value, "Value ?");
