@@ -64,7 +64,11 @@ function centerCameraOnObjectArray(objects) {
     });
     let x = (min_x + max_x) / 2;
     let y = (min_y + max_y) / 2;
-    tiled.mapEditor.currentMapView.centerOn(x, y);
+    if (objects.length > 0) {
+        tiled.mapEditor.currentMapView.centerOn(x, y);
+    } else {
+        tiled.alert("Nothing found", "Finder");
+    }
     //tiled.mapEditor.currentMapView.scale = 1;
 }
 
