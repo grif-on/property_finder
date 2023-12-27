@@ -82,6 +82,7 @@ const find_value = tiled.registerAction(shared_name_find_value, function () {
 
 find_value.text = shared_name_find_value;
 find_value.icon = "find_v.png";
+find_value.shortcut = "Ctrl+F";
 
 tiled.extendMenu("Map", [
     { separator: true },
@@ -159,6 +160,7 @@ const find_value_in_property = tiled.registerAction(shared_name_find_value_in_pr
 
 find_value_in_property.text = shared_name_find_value_in_property;
 find_value_in_property.icon = "find_v_in_p.png";
+find_value_in_property.shortcut = "Ctrl+Alt+F";
 
 tiled.extendMenu("Map", [
     { action: shared_name_find_value_in_property, before: "SelectNextTileset" }
