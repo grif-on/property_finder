@@ -83,6 +83,7 @@ const find_value = tiled.registerAction(shared_name_find_value, function () {
 
     let map = tiled.activeAsset;
     map.selectedObjects = [];
+    let targeted_objects = [];
     for (let i = 0; i < map.layerCount; i++) {
         current_layer = map.layerAt(i);
         if (option_only_on_visible_layers.checked && !current_layer.visible) continue;
@@ -92,15 +93,22 @@ const find_value = tiled.registerAction(shared_name_find_value, function () {
                     let properties = (option_also_include_object_types_defaults.checked) ? processed_object.resolvedProperties() : processed_object.properties();
                     for (const [key, value] of Object.entries(properties)) {
                         if (typeof (value) === "object") {
-                            if (value.value === new_value) processed_object.selected = true;
+                            if (value.value === new_value) {
+                                processed_object.selected = true;
+                                targeted_objects.push(processed_object);
+                            }
                         } else {
-                            if (value === new_value) processed_object.selected = true;
+                            if (value === new_value) {
+                                processed_object.selected = true;
+                                targeted_objects.push(processed_object);
+                            }
                         }
                     }
                 });
             }
         }
     }
+    centerCameraOnObjectArray(targeted_objects);
 });
 
 find_value.text = shared_name_find_value;
@@ -123,6 +131,7 @@ const find_property = tiled.registerAction(shared_name_find_property, function (
 
     let map = tiled.activeAsset;
     map.selectedObjects = [];
+    let targeted_objects = [];
     for (let i = 0; i < map.layerCount; i++) {
         current_layer = map.layerAt(i);
         if (option_only_on_visible_layers.checked && !current_layer.visible) continue;
@@ -131,12 +140,16 @@ const find_property = tiled.registerAction(shared_name_find_property, function (
                 current_layer.objects.forEach(function (processed_object) {
                     let properties = (option_also_include_object_types_defaults.checked) ? processed_object.resolvedProperties() : processed_object.properties();
                     for (const [key, value] of Object.entries(properties)) {
-                        if (key === new_property_name) processed_object.selected = true;
+                        if (key === new_property_name) {
+                            processed_object.selected = true;
+                            targeted_objects.push(processed_object);
+                        }
                     }
                 });
             }
         }
     }
+    centerCameraOnObjectArray(targeted_objects);
 });
 
 find_property.text = shared_name_find_property;
@@ -163,6 +176,7 @@ const find_value_in_property = tiled.registerAction(shared_name_find_value_in_pr
 
     let map = tiled.activeAsset;
     map.selectedObjects = [];
+    let targeted_objects = [];
     for (let i = 0; i < map.layerCount; i++) {
         current_layer = map.layerAt(i);
         if (option_only_on_visible_layers.checked && !current_layer.visible) continue;
@@ -171,14 +185,21 @@ const find_value_in_property = tiled.registerAction(shared_name_find_value_in_pr
                 current_layer.objects.forEach(function (processed_object) {
                     let value = (option_also_include_object_types_defaults.checked) ? processed_object.resolvedProperty(new_property_name) : processed_object.property(new_property_name);
                     if (typeof (value) === "object") {
-                        if (value.value === new_value) processed_object.selected = true;
+                        if (value.value === new_value) {
+                            processed_object.selected = true;
+                            targeted_objects.push(processed_object);
+                        }
                     } else {
-                        if (value === new_value) processed_object.selected = true;
+                        if (value === new_value) {
+                            processed_object.selected = true;
+                            targeted_objects.push(processed_object);
+                        }
                     }
                 });
             }
         }
     }
+    centerCameraOnObjectArray(targeted_objects);
 });
 
 find_value_in_property.text = shared_name_find_value_in_property;
