@@ -29,7 +29,7 @@ let shared_name_find_value = "Find objects with value";
 let shared_name_find_property = "Find objects with property";
 let shared_name_find_value_in_property = "Find objects with value in property";
 let shared_name_option_only_on_visible_layers = "finder - Only on visible layers";
-let shared_name_option_also_include_object_types_defaults = "finder - Also include object types default properties/values";
+let shared_name_option_also_include_object_types_defaults = "finder - Also include default properties/values";
 
 
 let previous_value = "";
