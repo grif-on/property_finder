@@ -36,11 +36,19 @@ let previous_value = "";
 let previous_property_name = "";
 
 
-function numberize(input) {
+function parseString(input) {
     let processed_value;
     if (input.charAt(0) === "\"" && (input.charAt(input.length - 1) === "\"" && input.length !== 1)) {
         processed_value = input.slice(1, input.length - 1);
     } else {
+        switch (input.toLowerCase()) {
+            case "true":
+                return true;
+            case "false":
+                return false;
+            default:
+                break;
+        }
         processed_value = Number(input);
         if (isNaN(processed_value) || !isFinite(processed_value)) {
             processed_value = input;
@@ -74,12 +82,12 @@ function centerCameraOnObjectArray(objects) {
 
 
 const find_value = tiled.registerAction(shared_name_find_value, function () {
-    let new_value = tiled.prompt("What value should object have in any of it properties ?\nValue will be treated as number if it can be converted to it ,\notherwise it will be treated as string .\nIf you don't want auto conversion then just wrap around input with \"\"\n(e.g. \"\" --> empty string and \"1\" --> string with number one) .", previous_value, "Value ?");
+    let new_value = tiled.prompt("What value should object have in any of it properties ?\nValue will be treated as number or boolean if it can be converted to them respectively ,\notherwise it will be treated as string .\nIf you don't want auto conversion then just wrap around input with \"\"\n(e.g. \"\" --> empty string , \"1\" --> string with number one and \"true\" --> string with word true) .", previous_value, "Value ?");
     if (new_value === "") return; //Note - "Cancel" empty string and user empty string are different (since "" !== "\"\"")
 
     previous_value = new_value;
 
-    new_value = numberize(new_value);
+    new_value = parseString(new_value);
 
     let map = tiled.activeAsset;
     map.selectedObjects = [];
@@ -124,7 +132,7 @@ tiled.extendMenu("Map", [
 
 
 const find_property = tiled.registerAction(shared_name_find_property, function () {
-    let new_property_name = tiled.prompt("\n\n‎‎‎‎‎‎‎‎‎‎‎‎‎            In which property object should have supplied value ?            ‎‎‎‎‎‎‎‎‎‎‎‎‎\n\n", previous_property_name, "Property ?");
+    let new_property_name = tiled.prompt("\n\n‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎                                               What property should object have ?                                               ‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎\n\n", previous_property_name, "Property ?");
     if (new_property_name === "") return;
 
     previous_property_name = new_property_name;
@@ -163,16 +171,16 @@ tiled.extendMenu("Map", [
 
 
 const find_value_in_property = tiled.registerAction(shared_name_find_value_in_property, function () {
-    let new_value = tiled.prompt("What value should object have ?\nValue will be treated as number if it can be converted to it ,\notherwise it will be treated as string .\nIf you don't want auto conversion then just wrap around input with \"\"\n(e.g. \"\" --> empty string and \"1\" --> string with number one) .", previous_value, "Value ?");
+    let new_value = tiled.prompt("What value should object have ?\nValue will be treated as number or boolean if it can be converted to them respectively ,\notherwise it will be treated as string .\nIf you don't want auto conversion then just wrap around input with \"\"\n(e.g. \"\" --> empty string , \"1\" --> string with number one and \"true\" --> string with word true) .", previous_value, "Value ?");
     if (new_value === "") return; //Note - "Cancel" empty string and user empty string are different (since "" !== "\"\"")
 
-    let new_property_name = tiled.prompt("\n\n‎‎‎‎‎‎‎‎‎‎‎‎‎            In which property object should have supplied value ?            ‎‎‎‎‎‎‎‎‎‎‎‎‎\n\n", previous_property_name, "Property ?");
+    let new_property_name = tiled.prompt("\n\n‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎                                 In which property object should have supplied value ?                                 ‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎\n\n", previous_property_name, "Property ?");
     if (new_property_name === "") return;
 
     previous_value = new_value;
     previous_property_name = new_property_name;
 
-    new_value = numberize(new_value);
+    new_value = parseString(new_value);
 
     let map = tiled.activeAsset;
     map.selectedObjects = [];
